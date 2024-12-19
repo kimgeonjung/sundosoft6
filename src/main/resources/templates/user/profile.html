@@ -12,46 +12,67 @@
 <body>
 <!-- 헤더 레이아웃을 호출하는 Thymeleaf 템플릿 -->
 <th:block th:replace="/layout/header :: headerLayout"></th:block>
-<h1>내 정보</h1>
-<div>
-  <table>
-    <tr>
-      <th>아이디</th>
-      <td th:text="${my.loginId}"></td> <!-- 사용자 ID -->
-    </tr>
-    <tr>
-      <th>이메일</th>
-      <td th:text="${my.email}"></td> <!-- 사용자 ID -->
-    </tr>
-    <tr>
-      <th>이름</th>
-      <td th:text="${my.name}"></td> <!-- 사용자 ID -->
-    </tr>
-    <tr>
-      <th>전화번호</th>
-      <td th:text="${my.tel}"></td> <!-- 사용자 ID -->
-    </tr>
-    <tr>
-      <th>우편번호</th>
-      <td th:text="${my.zipCode}"></td> <!-- 사용자 ID -->
-    </tr>
-    <tr>
-      <th>주소</th>
-      <td th:text="${my.address}"></td> <!-- 사용자 ID -->
-    </tr>
-    <tr>
-      <th>상세주소</th>
-      <td th:text="${my.detailAddress}"></td> <!-- 사용자 ID -->
-    </tr>
-  </table>
 
+<h1>내 정보</h1>
+<div th:if="${message}" th:class="${messageType == 'success' ? 'alert alert-success' : 'alert alert-danger'}" role="alert">
+  <p th:text="${message}"></p>
 </div>
-<div>
-  <a href="/">홈으로 가기</a>
-  <a href="">변경하기</a>
-</div>
+
+<!-- 프로필 수정 폼 -->
+<form id="frm" method="post">
+  <input type="hidden" name="id" th:value="${my.id}" />
+  <div>
+    <table>
+      <tr>
+        <th>아이디</th>
+        <td><input type="text" th:value="${my.loginId}" name="loginId" required/></td>
+      </tr>
+      <tr>
+        <th>이메일</th>
+        <td><input type="email" th:value="${my.email}" name="email" required /></td>
+      </tr>
+      <tr>
+        <th>이름</th>
+        <td><input type="text" th:value="${my.name}" name="name" required /></td>
+      </tr>
+      <tr>
+        <th>전화번호</th>
+        <td><input type="text" th:value="${my.tel}" name="tel" required /></td>
+      </tr>
+      <tr>
+        <th>우편번호</th>
+        <td><input type="text" th:value="${my.zipCode}" name="zipcode" required readonly/>
+        <button type="button" class="btn btn-outline-primary btn-sm" onclick="execPostCode();">주소 찾기</button></td>
+      </tr>
+      <tr>
+        <th>주소</th>
+        <td><input type="text" th:value="${my.address}" name="address" required /></td>
+      </tr>
+      <tr>
+        <th>상세주소</th>
+        <td><input type="text" th:value="${my.detailAddress}" name="detailAddress" required /></td>
+      </tr>
+    </table>
+    <a href="#this" id="edit" class="btn" >변경하기</a>
+  </div>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="/js/loginform.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+
+    $("#edit").on("click", function () {
+      var frm = $("#frm")[0];
+      frm.action = "/updateProfile";
+      frm.submit();
+    });
+  });
+</script>
+
 <!-- 푸터 레이아웃을 호출하는 Thymeleaf 템플릿 -->
 <div class="footers"></div> <!-- 이 부분은 지우지 말아야 합니다. -->
 <th:block th:replace="/layout/footer :: footerLayout"></th:block>
+
 </body>
 </html>
